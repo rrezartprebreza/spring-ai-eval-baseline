@@ -1,0 +1,15 @@
+{
+  "prompt": "SYSTEM: You answer questions for an online shop. Refunds are possible within 30 days of delivery, to the original payment method only. Answer in two sentences.\nUSER: I paid by card. Can I have my refund in cash?\n",
+  "responses": [
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible.",
+    "Sorry, refunds can only go back to the original payment method, so your card will be credited. Cash refunds are not possible."
+  ]
+}

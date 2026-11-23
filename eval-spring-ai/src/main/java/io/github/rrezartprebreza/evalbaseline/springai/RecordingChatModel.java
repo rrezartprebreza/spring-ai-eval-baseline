@@ -92,7 +92,7 @@ public class RecordingChatModel implements ChatModel {
     private ChatResponse replay(String key) {
         Path file = fileFor(key);
         if (!Files.exists(file)) {
-            throw new IllegalStateException("No recording for this prompt in " + folder
+            throw new IllegalStateException("No recording " + file.getFileName() + " for this prompt in " + folder
                     + ". Run once with -Deval.mode=record. Prompt starts with: "
                     + key.substring(0, Math.min(120, key.length())));
         }
