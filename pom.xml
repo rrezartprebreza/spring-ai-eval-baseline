@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.rrezart.evalbaseline</groupId>
+    <groupId>io.github.rrezartprebreza</groupId>
     <artifactId>spring-ai-eval-baseline</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -22,6 +22,7 @@
 
     <modules>
         <module>eval-core</module>
+        <module>eval-junit</module>
         <module>eval-spring-ai</module>
     </modules>
 
