@@ -10,8 +10,14 @@ import java.util.Arrays;
  * @param passes     how many of those runs passed
  * @param p95Millis  95th percentile latency in milliseconds, or -1 if not measured
  * @param totalCost  summed cost of all runs in your own unit (for example USD), 0 if not measured
+ * @param scores     scores between 0 and 1 reported by the runs, {@link ScoreStats#NONE} if none
  */
-public record CaseResult(String caseId, int runs, int passes, long p95Millis, double totalCost) {
+public record CaseResult(String caseId, int runs, int passes, long p95Millis, double totalCost, ScoreStats scores) {
+
+    /** A result without scores. */
+    public CaseResult(String caseId, int runs, int passes, long p95Millis, double totalCost) {
+        this(caseId, runs, passes, p95Millis, totalCost, ScoreStats.NONE);
+    }
 
     public CaseResult {
         if (caseId == null || caseId.isBlank()) {
@@ -22,6 +28,9 @@ public record CaseResult(String caseId, int runs, int passes, long p95Millis, do
         }
         if (runs <= 0 || passes < 0 || passes > runs) {
             throw new IllegalArgumentException("need runs > 0 and 0 <= passes <= runs");
+        }
+        if (scores == null) {
+            scores = ScoreStats.NONE;
         }
     }
 

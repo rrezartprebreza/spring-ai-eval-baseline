@@ -19,10 +19,14 @@ import java.util.Optional;
  * caseId	runs	passes	p95Millis	totalCost
  * refund-question	10	9	1840	0.0042
  * </pre>
+ *
+ * When any case reports scores, three columns are added: {@code scoreCount}, {@code scoreSum}
+ * and {@code scoreSumSq}. Files with five columns stay valid.
  */
 public final class Baseline {
 
     static final String HEADER = "caseId\truns\tpasses\tp95Millis\ttotalCost";
+    static final String SCORE_COLUMNS = "\tscoreCount\tscoreSum\tscoreSumSq";
 
     private final Map<String, CaseResult> cases;
 
@@ -53,16 +57,19 @@ public final class Baseline {
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).strip();
-            if (line.isEmpty() || line.startsWith("#") || line.equals(HEADER)) {
+            if (line.isEmpty() || line.startsWith("#") || line.startsWith("caseId\t")) {
                 continue;
             }
             String[] f = line.split("\t");
-            if (f.length != 5) {
-                throw new IOException(file + " line " + (i + 1) + ": expected 5 tab-separated fields");
+            if (f.length != 5 && f.length != 8) {
+                throw new IOException(file + " line " + (i + 1) + ": expected 5 or 8 tab-separated fields");
             }
             try {
+                ScoreStats scores = f.length == 8
+                        ? new ScoreStats(Integer.parseInt(f[5]), Double.parseDouble(f[6]), Double.parseDouble(f[7]))
+                        : ScoreStats.NONE;
                 results.add(new CaseResult(f[0], Integer.parseInt(f[1]), Integer.parseInt(f[2]),
-                        Long.parseLong(f[3]), Double.parseDouble(f[4])));
+                        Long.parseLong(f[3]), Double.parseDouble(f[4]), scores));
             } catch (IllegalArgumentException e) {
                 throw new IOException(file + " line " + (i + 1) + ": " + e.getMessage(), e);
             }
@@ -71,10 +78,16 @@ public final class Baseline {
     }
 
     public void write(Path file) throws IOException {
-        StringBuilder sb = new StringBuilder(HEADER).append('\n');
+        boolean withScores = cases.values().stream().anyMatch(r -> r.scores().present());
+        StringBuilder sb = new StringBuilder(HEADER).append(withScores ? SCORE_COLUMNS : "").append('\n');
         for (CaseResult r : cases.values()) {
             sb.append(r.caseId()).append('\t').append(r.runs()).append('\t').append(r.passes()).append('\t')
-                    .append(r.p95Millis()).append('\t').append(r.totalCost()).append('\n');
+                    .append(r.p95Millis()).append('\t').append(r.totalCost());
+            if (withScores) {
+                ScoreStats sc = r.scores();
+                sb.append('\t').append(sc.count()).append('\t').append(sc.sum()).append('\t').append(sc.sumSq());
+            }
+            sb.append('\n');
         }
         Path parent = file.toAbsolutePath().getParent();
         if (parent != null) {

@@ -21,6 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * }
  * }</pre>
  *
+ * <p>Add an {@link EvalTrial} parameter to record a score between 0 and 1 or a cost, and
+ * {@link EvalDataset} to run once per row of a dataset file.
+ *
  * <p>After the runs, the pass rate is compared with the class baseline (see {@link EvalBaseline}).
  * The test fails only on a significant drop, a large latency increase or a cost overrun.
  */
@@ -36,4 +39,10 @@ public @interface EvalTest {
 
     /** Id of the case in the baseline file; the method name when empty. */
     String caseId() default "";
+
+    /**
+     * How many runs may execute at the same time. Use more than 1 for slow live models; the code
+     * under test must then be thread-safe. Replay mode is fast enough without it.
+     */
+    int parallel() default 1;
 }

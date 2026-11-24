@@ -11,6 +11,9 @@ import java.util.Locale;
  * <p>A pass-rate drop fails a case only when it is both large enough ({@link Options#minDrop})
  * and unlikely to be chance (one-sided Fisher exact test, p below {@link Options#alpha}).
  * So a test that passes 9 of 10 times and then 8 of 10 times does not break the build.
+ *
+ * <p>When both the baseline and the new result carry scores, the mean score is checked the same
+ * way: a drop of at least {@link Options#minDrop} that a one-sided Welch t-test finds significant.
  */
 public final class RegressionCheck {
 
@@ -42,12 +45,13 @@ public final class RegressionCheck {
         }
     }
 
-    public enum Status { OK, NEW, PASS_RATE_DROP, SLOWER, OVER_BUDGET }
+    public enum Status { OK, NEW, PASS_RATE_DROP, SCORE_DROP, SLOWER, OVER_BUDGET }
 
     /** Verdict for one case. {@code pValue} is NaN when no test was run. */
     public record Finding(CaseResult current, CaseResult baseline, Status status, double pValue) {
         public boolean failed() {
-            return status == Status.PASS_RATE_DROP || status == Status.SLOWER || status == Status.OVER_BUDGET;
+            return status == Status.PASS_RATE_DROP || status == Status.SCORE_DROP || status == Status.SLOWER
+                    || status == Status.OVER_BUDGET;
         }
     }
 
@@ -61,8 +65,10 @@ public final class RegressionCheck {
         public String toMarkdown() {
             StringBuilder sb = new StringBuilder();
             sb.append(failed() ? "**Eval regression found.**\n\n" : "**No eval regression.**\n\n");
-            sb.append("| Case | Pass rate (95% CI) | Baseline | p | p95 ms | Status |\n");
-            sb.append("| --- | --- | --- | --- | --- | --- |\n");
+            boolean scores = findings.stream().anyMatch(f -> f.current().scores().present());
+            sb.append("| Case | Pass rate (95% CI) | Baseline | p |").append(scores ? " Mean score | Baseline score |" : "")
+                    .append(" p95 ms | Status |\n");
+            sb.append("| --- | --- | --- | --- |").append(scores ? " --- | --- |" : "").append(" --- | --- |\n");
             for (Finding f : findings) {
                 CaseResult c = f.current();
                 Interval ci = c.interval();
@@ -70,8 +76,12 @@ public final class RegressionCheck {
                         .append(" | ").append(pct(c.passRate())).append(" (").append(pct(ci.low())).append("–")
                         .append(pct(ci.high())).append(") ")
                         .append(" | ").append(f.baseline() == null ? "–" : pct(f.baseline().passRate()))
-                        .append(" | ").append(Double.isNaN(f.pValue()) ? "–" : String.format(Locale.ROOT, "%.3f", f.pValue()))
-                        .append(" | ").append(c.p95Millis() < 0 ? "–" : String.valueOf(c.p95Millis()))
+                        .append(" | ").append(Double.isNaN(f.pValue()) ? "–" : String.format(Locale.ROOT, "%.3f", f.pValue()));
+                if (scores) {
+                    sb.append(" | ").append(score(c.scores()))
+                            .append(" | ").append(f.baseline() == null ? "–" : score(f.baseline().scores()));
+                }
+                sb.append(" | ").append(c.p95Millis() < 0 ? "–" : String.valueOf(c.p95Millis()))
                         .append(" | ").append(f.status()).append(" |\n");
             }
             return sb.toString();
@@ -79,6 +89,10 @@ public final class RegressionCheck {
 
         private static String pct(double v) {
             return Math.round(v * 100) + "%";
+        }
+
+        private static String score(ScoreStats s) {
+            return s.present() ? String.format(Locale.ROOT, "%.2f", s.mean()) : "–";
         }
     }
 
@@ -107,6 +121,13 @@ public final class RegressionCheck {
             p = FisherExact.pLower(b.passes(), b.runs(), c.passes(), c.runs());
             if (p < o.alpha()) {
                 return new Finding(c, b, Status.PASS_RATE_DROP, p);
+            }
+        }
+        if (c.scores().present() && b.scores().present()
+                && b.scores().mean() - c.scores().mean() >= o.minDrop() - 1e-9) {
+            double ps = Stats.welchLower(b.scores(), c.scores());
+            if (!Double.isNaN(ps) && ps < o.alpha()) {
+                return new Finding(c, b, Status.SCORE_DROP, ps);
             }
         }
         if (o.maxLatencyFactor() > 0 && b.p95Millis() > 0 && c.p95Millis() > b.p95Millis() * o.maxLatencyFactor()) {

@@ -37,16 +37,18 @@ public final class ModelComparison {
         int passes = 0;
         long p95 = -1;
         double cost = 0;
+        ScoreStats scores = ScoreStats.NONE;
         for (CaseResult r : results) {
             runs += r.runs();
             passes += r.passes();
             p95 = Math.max(p95, r.p95Millis());
             cost += r.totalCost();
+            scores = scores.plus(r.scores());
         }
         if (runs == 0) {
             throw new IllegalArgumentException("no results for " + model);
         }
-        return new CaseResult(model, runs, passes, p95, cost);
+        return new CaseResult(model, runs, passes, p95, cost, scores);
     }
 
     /** One row per case, one column per model, plus an overall row with cost per run. */

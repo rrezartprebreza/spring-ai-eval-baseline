@@ -21,14 +21,23 @@ public final class RepeatedRunner {
         Trial run() throws Exception;
     }
 
-    /** Result of one run: whether it passed and what it cost. */
-    public record Trial(boolean passed, double cost) {
+    /** Result of one run: whether it passed, what it cost, and an optional score (NaN for none). */
+    public record Trial(boolean passed, double cost, double score) {
+        public Trial(boolean passed, double cost) {
+            this(passed, cost, Double.NaN);
+        }
+
         public static Trial of(boolean passed) {
             return new Trial(passed, 0);
         }
 
         public static Trial of(boolean passed, double cost) {
             return new Trial(passed, cost);
+        }
+
+        /** A scored run; it counts as passed. */
+        public static Trial scored(double score) {
+            return new Trial(true, 0, score);
         }
     }
 
@@ -41,6 +50,7 @@ public final class RepeatedRunner {
         }
         int passes = 0;
         double cost = 0;
+        ScoreStats scores = ScoreStats.NONE;
         long[] millis = new long[runs];
         for (int i = 0; i < runs; i++) {
             long start = System.nanoTime();
@@ -51,12 +61,15 @@ public final class RepeatedRunner {
                         passes++;
                     }
                     cost += t.cost();
+                    if (!Double.isNaN(t.score())) {
+                        scores = scores.plus(t.score());
+                    }
                 }
             } catch (Exception e) {
                 // counted as a failed run
             }
             millis[i] = (System.nanoTime() - start) / 1_000_000;
         }
-        return new CaseResult(caseId, runs, passes, CaseResult.p95(millis), cost);
+        return new CaseResult(caseId, runs, passes, CaseResult.p95(millis), cost, scores);
     }
 }
