@@ -38,6 +38,7 @@
         <module>eval-core</module>
         <module>eval-junit</module>
         <module>eval-spring-ai</module>
+        <module>eval-spring-boot</module>
         <module>eval-example</module>
     </modules>
 
@@ -46,6 +47,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-ai.version>1.0.0</spring-ai.version>
         <junit.version>5.11.4</junit.version>
+        <spring-boot.version>3.5.0</spring-boot.version>
     </properties>
 
     <dependencyManagement>
