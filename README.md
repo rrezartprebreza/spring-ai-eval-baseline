@@ -6,6 +6,8 @@ Regression tests for LLM features that know models are not deterministic.
 
 A normal test runs once and passes or fails. An LLM answer can pass 7 times in 10, so one run tells you very little, and a strict test either breaks the build at random or gets switched off. This library runs each test several times, reports the pass rate with a 95% confidence interval, and fails the build only when the pass rate drops for real compared with a stored baseline. Recorded answers let normal CI run offline and free.
 
+![A green eval run turning red after a prompt change breaks 7 of 10 answers](docs/demo.gif)
+
 Status: 0.1.0-SNAPSHOT, not on Maven Central yet.
 
 ## Quick start
