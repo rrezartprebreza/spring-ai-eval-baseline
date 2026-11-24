@@ -81,6 +81,24 @@ public final class ModelComparison {
         return sb.append('\n').toString();
     }
 
+    /**
+     * Writes {@link #toMarkdown} to {@code <eval.report-dir>/<name>.md} (default
+     * {@code target/eval-reports}), where the build workflow collects reports for the CI summary
+     * and the pull request comment.
+     *
+     * @return the file written
+     */
+    public static java.nio.file.Path writeReport(String name, Map<String, List<CaseResult>> byModel)
+            throws java.io.IOException {
+        java.nio.file.Path dir = EvalGate.reportDir();
+        java.nio.file.Files.createDirectories(dir);
+        String safe = name.replaceAll("[^A-Za-z0-9._-]", "_");
+        java.nio.file.Path file = dir.resolve(safe + ".md");
+        java.nio.file.Files.writeString(file, "### " + name + "\n\n" + toMarkdown(byModel),
+                java.nio.charset.StandardCharsets.UTF_8);
+        return file;
+    }
+
     private static String cell(CaseResult r) {
         Interval ci = r.interval();
         return pct(r.passRate()) + " (" + pct(ci.low()) + "–" + pct(ci.high()) + ")";

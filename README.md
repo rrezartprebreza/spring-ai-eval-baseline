@@ -125,7 +125,7 @@ void answersRefundQuestions(EvalCase c) {
 {"id": "cash", "question": "Can I have my refund in cash?", "mustMention": "original payment method"}
 ```
 
-JSONL and CSV (with a header row) are supported; an `id` column names each case. `@EvalDataset(value = "...", repeat = 5)` runs every row five times.
+JSONL, a JSON array (`.json`) and CSV (with a header row) are supported; an `id` column names each case. `@EvalDataset(value = "...", repeat = 5)` runs every row five times.
 
 ## Scores (0.2.0)
 
@@ -219,6 +219,7 @@ Map<String, List<CaseResult>> byModel = ModelComparison.run(
         List.of("llama-3.1-8b-instant", "llama-3.3-70b-versatile"),
         model -> List.of(RepeatedRunner.run("refund", 10, () -> trialWith(model))));
 System.out.println(ModelComparison.toMarkdown(byModel));
+ModelComparison.writeReport("support-bot-models", byModel); // target/eval-reports, shown in CI and on pull requests
 ```
 
 This gives one row per case and one column per model, with the pass rate, its interval and the cost per run.
