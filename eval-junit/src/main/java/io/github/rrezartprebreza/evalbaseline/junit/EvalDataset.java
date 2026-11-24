@@ -20,14 +20,14 @@ import java.lang.annotation.Target;
  *
  * The pass rate over all rows is compared with the baseline, like any other eval test, and the
  * failure message lists the rows that failed. {@link EvalTest#runs()} is ignored.
- * See {@link io.github.rrezartprebreza.evalbaseline.Datasets} for the JSONL and CSV formats.
+ * See {@link io.github.rrezartprebreza.evalbaseline.Datasets} for the JSONL, JSON and CSV formats.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EvalDataset {
 
-    /** Dataset file, relative to the module directory: {@code .jsonl} or {@code .csv}. */
+    /** Dataset file, relative to the module directory: {@code .jsonl}, {@code .json} or {@code .csv}. */
     String value();
 
     /** How many times to run each row, for models that answer differently each time. */
