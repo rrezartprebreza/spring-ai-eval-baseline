@@ -6,7 +6,7 @@ title: The statistics, in plain words
 
 ## Why not just fail on any drop?
 
-With 10 runs, a test that is truly right 90% of the time will show 8 out of 10 about one time in five, by chance alone. Failing on that would break the build at random, and people would switch the test off.
+With 10 runs, a test that is truly right 90% of the time will show 8 or fewer out of 10 about one time in four, by chance alone. Failing on that would break the build at random, and people would switch the test off.
 
 ## Pass rates: Fisher's exact test
 
