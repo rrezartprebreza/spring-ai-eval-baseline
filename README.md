@@ -130,6 +130,12 @@ Each test class writes `target/eval-reports/<Class>.md`. The included [build wor
 | `eval.baseline-dir` | `src/test/resources/eval-baselines` | Baseline folder when `@EvalBaseline` gives no file |
 | `eval.report-dir` | `target/eval-reports` | Where Markdown reports go |
 
+## Used in
+
+- [misconception-feedback](https://github.com/rrezartprebreza/misconception-feedback): a research tool that detects student misconceptions in data structures and algorithms code. [`DetectorEvalTest`](https://github.com/rrezartprebreza/misconception-feedback/blob/main/src/test/java/dev/rrezart/misconception/evalbaseline/DetectorEvalTest.java) runs the detector on a synthetic answer set, one answer per run, and fails CI when a prompt or catalogue change makes detection significantly worse. Answers were recorded once with a local Ollama model and are replayed in CI.
+
+Using the library in your project? Open a pull request to add it here.
+
 ## How it compares
 
 - [Spring AI evaluators](https://docs.spring.io/spring-ai/reference/api/testing.html) (`RelevancyEvaluator`, `FactCheckingEvaluator`) judge one answer. Use them inside an `@EvalTest` as the check.
