@@ -181,7 +181,7 @@ Record with `mvn test -Deval.mode=record -Deval.update-baseline=true`. Without `
 
 ## Kotlin
 
-Annotations work the same from Kotlin:
+Annotations work the same from Kotlin. A runnable test is in [`eval-example/src/test/kotlin`](eval-example/src/test/kotlin/io/github/rrezartprebreza/evalbaseline/example/SupportBotKotlinEvalTest.kt):
 
 ```kotlin
 @EvalBaseline("src/test/resources/baseline.tsv")
