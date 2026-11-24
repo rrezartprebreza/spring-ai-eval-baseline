@@ -135,7 +135,8 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <autoPublish>true</autoPublish>
-                            <waitUntil>published</waitUntil>
+                            <!-- Do not poll the status: plugin 0.7.0 cannot parse newer Central replies. Check central.sonatype.com/publishing/deployments. -->
+                            <waitUntil>uploaded</waitUntil>
                             <excludeArtifacts>
                                 <artifact>eval-example</artifact>
                             </excludeArtifacts>
