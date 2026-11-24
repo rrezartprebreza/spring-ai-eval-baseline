@@ -8,7 +8,26 @@ A normal test runs once and passes or fails. An LLM answer can pass 7 times in 1
 
 ![A green eval run turning red after a prompt change breaks 7 of 10 answers](docs/demo.gif)
 
-Status: 0.1.0-SNAPSHOT, not on Maven Central yet.
+## Install
+
+Version 0.1.0 is on Maven Central. Add the modules you need with test scope:
+
+```xml
+<dependency>
+    <groupId>io.github.rrezartprebreza</groupId>
+    <artifactId>eval-junit</artifactId>
+    <version>0.1.0</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>io.github.rrezartprebreza</groupId>
+    <artifactId>eval-spring-ai</artifactId>
+    <version>0.1.0</version>
+    <scope>test</scope>
+</dependency>
+```
+
+`eval-junit` brings `eval-core` with it. Gradle: `testImplementation("io.github.rrezartprebreza:eval-junit:0.1.0")`.
 
 ## Quick start
 
