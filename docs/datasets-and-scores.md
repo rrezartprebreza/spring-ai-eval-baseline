@@ -21,7 +21,7 @@ void answersRefundQuestions(EvalCase c) {
 {"id": "cash", "question": "Can I have my refund in cash?", "mustMention": "original payment method"}
 ```
 
-- **Formats:** JSONL (one object per line; `//` lines are comments) and CSV with a header row. Quoted CSV fields may hold commas, quotes (`""`) and line breaks. Nested JSON values arrive as JSON text.
+- **Formats:** JSONL (one object per line; `//` lines are comments), a `.json` file holding one array of objects, and CSV with a header row. Quoted CSV fields may hold commas, quotes (`""`) and line breaks. Nested JSON values arrive as JSON text.
 - **Ids:** an `id` column names each case; otherwise cases are `row-1`, `row-2`, ...
 - **Reading values:** `c.get("name")` throws on a missing column, listing the columns, so typos fail loudly. `getInt`, `getDouble`, `getBoolean` and `find` are there too.
 - **Repeats:** `@EvalDataset(value = "...", repeat = 5)` runs each row five times, for models that answer differently each time.

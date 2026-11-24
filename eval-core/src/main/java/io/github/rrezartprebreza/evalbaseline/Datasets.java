@@ -18,6 +18,7 @@ import java.util.Set;
  * <ul>
  *   <li><b>JSONL</b> ({@code .jsonl}, {@code .ndjson}): one JSON object per line. Strings, numbers
  *       and booleans become text; nested arrays and objects are kept as JSON text.</li>
+ *   <li><b>JSON</b> ({@code .json}): one array of flat objects, in the same form as JSONL rows.</li>
  *   <li><b>CSV</b> ({@code .csv}): a header row, then one row per case. Fields may be quoted with
  *       {@code "}, and a quoted field may contain commas, quotes ({@code ""}) and line breaks.</li>
  * </ul>
@@ -39,10 +40,12 @@ public final class Datasets {
         List<EvalCase> cases;
         if (name.endsWith(".jsonl") || name.endsWith(".ndjson")) {
             cases = readJsonl(text, file);
+        } else if (name.endsWith(".json")) {
+            cases = readJsonArray(text, file);
         } else if (name.endsWith(".csv")) {
             cases = readCsv(text, file);
         } else {
-            throw new IOException("Unknown dataset format for " + file + ": use .jsonl or .csv");
+            throw new IOException("Unknown dataset format for " + file + ": use .jsonl, .json or .csv");
         }
         Set<String> ids = new HashSet<>();
         for (EvalCase c : cases) {
@@ -70,6 +73,18 @@ public final class Datasets {
             } catch (IllegalArgumentException e) {
                 throw new IOException(file + " line " + (i + 1) + ": " + e.getMessage(), e);
             }
+        }
+        return out;
+    }
+
+    static List<EvalCase> readJsonArray(String text, Path file) throws IOException {
+        List<EvalCase> out = new ArrayList<>();
+        try {
+            for (Map<String, String> values : new FlatJson(text).array()) {
+                out.add(new EvalCase(idOf(values, out.size() + 1), values));
+            }
+        } catch (IllegalArgumentException e) {
+            throw new IOException(file + ": " + e.getMessage(), e);
         }
         return out;
     }
@@ -160,9 +175,54 @@ public final class Datasets {
             this.s = s;
         }
 
+        /** One object filling the whole text. */
         Map<String, String> object() {
-            Map<String, String> out = new LinkedHashMap<>();
             skipSpace();
+            Map<String, String> out = objectValue();
+            skipSpace();
+            if (i != s.length()) {
+                throw error("unexpected text after the object");
+            }
+            return out;
+        }
+
+        /** An array of objects filling the whole text. */
+        List<Map<String, String>> array() {
+            List<Map<String, String>> out = new ArrayList<>();
+            skipSpace();
+            if (i >= s.length() || s.charAt(i) != '[') {
+                throw error("a .json dataset must be an array of objects, starting with '['");
+            }
+            i++;
+            skipSpace();
+            if (peek() == ']') {
+                i++;
+            } else {
+                while (true) {
+                    skipSpace();
+                    if (peek() != '{') {
+                        throw error("each element of the array must be an object");
+                    }
+                    out.add(objectValue());
+                    skipSpace();
+                    char c = next();
+                    if (c == ']') {
+                        break;
+                    }
+                    if (c != ',') {
+                        throw error("expected ',' or ']'");
+                    }
+                }
+            }
+            skipSpace();
+            if (i != s.length()) {
+                throw error("unexpected text after the array");
+            }
+            return out;
+        }
+
+        private Map<String, String> objectValue() {
+            Map<String, String> out = new LinkedHashMap<>();
             expect('{');
             skipSpace();
             if (peek() == '}') {
@@ -184,10 +244,6 @@ public final class Datasets {
                         throw error("expected ',' or '}'");
                     }
                 }
-            }
-            skipSpace();
-            if (i != s.length()) {
-                throw error("unexpected text after the object");
             }
             return out;
         }
@@ -289,7 +345,17 @@ public final class Datasets {
         }
 
         private IllegalArgumentException error(String message) {
-            return new IllegalArgumentException(message + " at column " + (i + 1));
+            int line = 1;
+            int column = 1;
+            for (int k = 0; k < Math.min(i, s.length()); k++) {
+                if (s.charAt(k) == '\n') {
+                    line++;
+                    column = 1;
+                } else {
+                    column++;
+                }
+            }
+            return new IllegalArgumentException(message + (line > 1 ? " at line " + line + ", column " : " at column ") + column);
         }
     }
 }

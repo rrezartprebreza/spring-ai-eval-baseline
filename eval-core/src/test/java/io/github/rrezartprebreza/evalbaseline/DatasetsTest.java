@@ -75,4 +75,38 @@ class DatasetsTest {
         Files.writeString(txt, "x");
         assertThrows(IOException.class, () -> Datasets.read(txt));
     }
+
+    @Test
+    void readsAJsonArray() throws IOException {
+        Path file = dir.resolve("cases.json");
+        Files.writeString(file, """
+                [
+                  {"id": "refund", "question": "Can I get \\"cash\\"?", "meta": {"tags": [1, 2]}},
+                  {"question": "second"}
+                ]
+                """);
+
+        List<EvalCase> cases = Datasets.read(file);
+
+        assertEquals(List.of("refund", "row-2"), cases.stream().map(EvalCase::id).toList());
+        assertEquals("Can I get \"cash\"?", cases.get(0).get("question"));
+        assertEquals("{\"tags\": [1, 2]}", cases.get(0).get("meta"));
+    }
+
+    @Test
+    void rejectsEmptyAndMalformedJsonArrays() throws IOException {
+        Path empty = dir.resolve("empty.json");
+        Files.writeString(empty, "[]");
+        assertThrows(IOException.class, () -> Datasets.read(empty));
+
+        Path numbers = dir.resolve("numbers.json");
+        Files.writeString(numbers, "[1, 2]");
+        IOException e = assertThrows(IOException.class, () -> Datasets.read(numbers));
+        assertEquals(true, e.getMessage().contains("must be an object"), e.getMessage());
+
+        Path object = dir.resolve("object.json");
+        Files.writeString(object, "{\"id\": \"a\"}");
+        e = assertThrows(IOException.class, () -> Datasets.read(object));
+        assertEquals(true, e.getMessage().contains("array of objects"), e.getMessage());
+    }
 }
