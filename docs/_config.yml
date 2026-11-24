@@ -1,0 +1,6 @@
+title: Spring AI Eval Baseline
+description: Regression tests for LLM features that know models are not deterministic
+theme: jekyll-theme-cayman
+exclude:
+  - demo.tape
+  - break_answers.py
