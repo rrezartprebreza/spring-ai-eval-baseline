@@ -110,7 +110,7 @@ class EvalFeaturesTest {
 
     @Test
     void datasetFailureListsTheFailedRows() throws Exception {
-        Baseline.of(List.of(new CaseResult("knowsTheCapital", 40, 40, -1, 0)))
+        Baseline.of(List.of(new CaseResult("knowsTheCapital", 100, 100, -1, 0)))
                 .write(dir.resolve("baselines/Capitals.tsv"));
         Events events = run(Capitals.class);
         events.assertStatistics(s -> s.failed(1));
