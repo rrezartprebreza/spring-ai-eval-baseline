@@ -41,6 +41,8 @@ testImplementation("io.github.rrezartprebreza:eval-junit:0.2.0")
 testImplementation("io.github.rrezartprebreza:eval-spring-ai:0.2.0")
 ```
 
+A complete Gradle project is in [`examples/gradle-quickstart`](examples/gradle-quickstart): `./gradlew test`.
+
 New in 0.2.0: datasets, scores, parallel runs, token cost, `record-missing` and the Spring Boot module. See the [changelog](CHANGELOG.md).
 
 ## Quick start

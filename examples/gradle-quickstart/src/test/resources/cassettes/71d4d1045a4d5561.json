@@ -1,0 +1,15 @@
+{
+  "prompt": "SYSTEM: You answer questions for an online shop. Refunds are possible within 30 days of delivery, to the original payment method only. Answer in two sentences.\nUSER: Can I get a refund two weeks after delivery?\n",
+  "responses": [
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, you are still within the refund period of one month. We will send the money back to the card you paid with.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method.",
+    "Yes, two weeks after delivery is still inside our 30 days refund window. The money goes back to your original payment method."
+  ]
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- Datasets can be a JSON array file (`.json`).
+- `ModelComparison.writeReport` saves the comparison table to the report folder.
+- A Kotlin eval test in `eval-example` and a Gradle quickstart in `examples/gradle-quickstart`.
+- Provider recipes for Anthropic Claude and Azure OpenAI.
+
 ## 0.2.0 (2026-11-24)
 
 ### Added

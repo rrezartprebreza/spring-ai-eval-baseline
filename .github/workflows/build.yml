@@ -60,3 +60,17 @@ jobs:
       - name: Fail if the build failed
         if: steps.verify.outcome != 'success'
         run: exit 1
+
+  gradle-quickstart:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/gradle-quickstart
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Run the Gradle example against the released artifacts (replay mode)
+        run: ./gradlew test --no-daemon

@@ -4,3 +4,7 @@ target/
 .vscode/
 .DS_Store
 .env
+
+# Gradle example
+.gradle/
+examples/*/build/
