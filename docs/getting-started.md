@@ -10,13 +10,13 @@ title: Getting started
 <dependency>
     <groupId>io.github.rrezartprebreza</groupId>
     <artifactId>eval-junit</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>io.github.rrezartprebreza</groupId>
     <artifactId>eval-spring-ai</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -24,11 +24,11 @@ title: Getting started
 Gradle (Kotlin DSL):
 
 ```kotlin
-testImplementation("io.github.rrezartprebreza:eval-junit:0.1.0")
-testImplementation("io.github.rrezartprebreza:eval-spring-ai:0.1.0")
+testImplementation("io.github.rrezartprebreza:eval-junit:0.2.0")
+testImplementation("io.github.rrezartprebreza:eval-spring-ai:0.2.0")
 ```
 
-Features marked 0.2.0 in these guides are on `main` and not yet released.
+Features marked 0.2.0 in these guides need version 0.2.0 or later. For a Spring Boot app, also add `eval-spring-boot` ([Spring Boot guide](spring-boot.md)).
 
 ## A first eval test
 

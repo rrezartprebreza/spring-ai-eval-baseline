@@ -12,33 +12,33 @@ Full documentation: **https://rrezartprebreza.github.io/spring-ai-eval-baseline/
 
 ## Install
 
-Version 0.1.0 is on Maven Central. Add the modules you need with test scope:
+Version 0.2.0 is on Maven Central. Add the modules you need with test scope:
 
 ```xml
 <dependency>
     <groupId>io.github.rrezartprebreza</groupId>
     <artifactId>eval-junit</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>io.github.rrezartprebreza</groupId>
     <artifactId>eval-spring-ai</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <scope>test</scope>
 </dependency>
 ```
 
-`eval-junit` brings `eval-core` with it. For a Spring Boot app, `eval-spring-boot` (from 0.2.0) wraps your `ChatModel` bean automatically; see [Spring Boot](#spring-boot).
+`eval-junit` brings `eval-core` with it. For a Spring Boot app, add `eval-spring-boot` as well: it wraps your `ChatModel` bean automatically; see [Spring Boot](#spring-boot).
 
 Gradle (Kotlin DSL):
 
 ```kotlin
-testImplementation("io.github.rrezartprebreza:eval-junit:0.1.0")
-testImplementation("io.github.rrezartprebreza:eval-spring-ai:0.1.0")
+testImplementation("io.github.rrezartprebreza:eval-junit:0.2.0")
+testImplementation("io.github.rrezartprebreza:eval-spring-ai:0.2.0")
 ```
 
-Datasets, scores, parallel runs, token cost, `record-missing` and the Spring Boot module are in 0.2.0, which is on `main` and not yet released.
+New in 0.2.0: datasets, scores, parallel runs, token cost, `record-missing` and the Spring Boot module. See the [changelog](CHANGELOG.md).
 
 ## Quick start
 

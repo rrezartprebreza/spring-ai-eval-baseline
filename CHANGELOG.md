@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2026-11-24)
 
 ### Added
 - `@EvalDataset`: run an `@EvalTest` once per row of a JSONL or CSV file; failures list the rows that failed.
