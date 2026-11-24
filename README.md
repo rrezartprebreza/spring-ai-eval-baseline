@@ -3,6 +3,9 @@
 Regression tests for LLM features that know models are not deterministic.
 
 [![build](https://github.com/rrezartprebreza/spring-ai-eval-baseline/actions/workflows/build.yml/badge.svg)](https://github.com/rrezartprebreza/spring-ai-eval-baseline/actions/workflows/build.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.rrezartprebreza/eval-junit?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.rrezartprebreza/eval-junit)
+[![Docs](https://img.shields.io/badge/docs-github.io-blue)](https://rrezartprebreza.github.io/spring-ai-eval-baseline/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 A normal test runs once and passes or fails. An LLM answer can pass 7 times in 10, so one run tells you very little, and a strict test either breaks the build at random or gets switched off. This library runs each test several times, reports the pass rate with a 95% confidence interval, and fails the build only when the pass rate drops for real compared with a stored baseline. Recorded answers let normal CI run offline and free.
 
@@ -247,6 +250,10 @@ Using the library in your project? Open a pull request to add it here.
 ## Build and release
 
 `mvn verify` builds and runs everything offline. Releases go to Maven Central from a tag; see [RELEASING.md](RELEASING.md).
+
+## Contributing
+
+Issues and pull requests are welcome. Issues labelled [good first issue](https://github.com/rrezartprebreza/spring-ai-eval-baseline/labels/good%20first%20issue) are small and well described; see [CONTRIBUTING.md](CONTRIBUTING.md) for how to build and test.
 
 ## Licence
 
